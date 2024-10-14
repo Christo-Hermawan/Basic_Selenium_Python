@@ -7,42 +7,38 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import random
 
-# path to Edge WebDriver
-service = Service(executable_path="chromedriver.exe")
+# Path to Edge WebDriver
+service = Service(executable_path="C:\\Users\\chris\\OneDrive\\Desktop\\Selenium\\msedgedriver.exe")  # Update path
 
-# initialize WebDriver
-driver = webdriver.Chrome(service=service)
+# Initialize WebDriver
+driver = webdriver.Edge(service=service)
 
-driver.get("https://www.bing.com")
+driver.get("http://localhost:3000")
 
-# step 1 - Wait for the element to show up (random delay added)
+# Step 1 - Wait for the element to show up (random delay added)
 delay = random.uniform(2.0, 5.0)  # Delay between 2 to 5 seconds
 time.sleep(delay)
 
-# step 2 - wait until the elements shows up
-# wait if after 10s until the element with the class name shows up
-# if the element doesn't show, shut the program
+# Step 2 - Wait until the username input shows up (timeout after 10 seconds)
 WebDriverWait(driver, 10).until(
-    EC.presence_of_element_located((By.ID, "sb_form_q"))
+    EC.presence_of_element_located((By.ID, "usernameID"))  # Replace with actual ID of the username field
 )
 
-# step 3 - then do the activity
-input_element = driver.find_element(By.ID, "sb_form_q") # find the element by class name
-input_element.clear() # clear the elements incase the field not empty / have default value
-time.sleep(delay)
-input_element.send_keys("youtube" + Keys.ENTER) # send text/input + enter 
+# Step 3 - Input the username and password
+input_element = driver.find_element(By.ID, "usernameID")  # Locate the username field by ID
+input_element.clear()
+input_element.send_keys("christo")  # Send username
 
+input_element = driver.find_element(By.ID, "passwordID")  # Locate the password field by ID
+input_element.clear()
+input_element.send_keys("admin")  # Send password
 
-# if the link text to exist then continue
-WebDriverWait(driver, 20).until(
-    EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "YouTube"))
-)
+# Step 4 - Click the "Login" button (replace with the correct selector for the button)
+login_button = driver.find_element(By.XPATH, "//button[text()='Login']")  # Locate the button using its text
+login_button.click()  # Perform the click action
 
-time.sleep(delay)
-link = driver.find_element(By.PARTIAL_LINK_TEXT, "YouTube")
-link.click();
+# Pause to see the result (adjust or remove as needed)
+time.sleep(100)
 
-time.sleep(50)
-
+# Close the browser
 driver.quit()
-
